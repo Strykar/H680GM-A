@@ -2,7 +2,7 @@
 My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router to:
 1. Dual-stack my router and LAN via the IPv6 /64 that Airtel provides to all residential customers natively now.
 2. Port-forward ports 80 and 443 so I can run an HTTP(S) server on my new symmetric 1 Gigabit connection.
-
+---
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
@@ -12,6 +12,7 @@ WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for
 * [Getting port 80 and 443 forwards to work](https://github.com/Strykar/H680GM-A#tldr---getting-port-80-and-443-forwarded)
 
 * [Getting native IPv6 to work with a static IPv4 assigned](https://github.com/Strykar/H680GM-A#tldr---getting-native-ipv6-to-work-with-a-static-ipv4-assigned)
+---
 
 |     Pros               |     Cons           |
 | ---------------------- | ------------------ |
@@ -21,6 +22,8 @@ WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for
 | Ships with `/userfs/bin/tcapi`| Busybox gimps available binary options |
 | XPON module is 2.1 Gbps Down / 1 Gbps Up | 1 Gbit LAN NICs |
 
+
+---
 This should list all the tables / chains / rules
 ```
 iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'"
@@ -77,7 +80,9 @@ Thus it is impossible to configure a static IPv4 WAN address with IPv6, unless t
 Take note that port 22 is not on the list above.[^1]
 Having root ssh access helped..
 
-## TLDR - Getting port 80 and 443 forwarded
+---
+
+### TLDR - Getting port 80 and 443 forwarded
 The startup scripts invoke [`/etc/acl.sh`](https://gist.github.com/Strykar/13193cbeb57bfea8d2aa69a47afe2918) which prevents some ports from being forwarded
 
 The line `iptables -A ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53,7547 -j acl_chain` is the culprit.
@@ -91,7 +96,7 @@ iptables -D ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53,7547 -j a
 iptables -A ACL -p tcp -m multiport --dports 21,23,22,69,161,53,7547 -j acl_chain
 ```
 
-## TLDR - Getting native IPv6 to work with a static IPv4 assigned
+### TLDR - Getting native IPv6 to work with a static IPv4 assigned
 It appears that the router was never configured to be dual-stacked for a customer with static IPv4.
 IPv6 is available only via PPPoE tunnel (1492 MTU) and static IPv4 is assigned via IPoE (1500 MTU) over VLAN 100.
 
