@@ -49,10 +49,91 @@ staticGet
 
 It does ship with tcpdump, which made troubleshooting DHCPv6-PD and ICMPv6 traffic trivial.
 
-Regarding OpenWRT, there is zero chance a driver for the Huawei / HiSense LTY9775M XPON module will ever be available, there is a non-zero chance it could boot OpenWRT based off the Xiaomi (MIPS 1004Kc V2.15) router _if_ someone takes the effort.
+Regarding [OpenWRT, there is zero chance](https://forum.openwrt.org/t/openwrt-support-for-en7528-based-xpon-router/78121/4) a driver for the Huawei / HiSense LTY9775M XPON module will ever be available, there is a non-zero chance it could boot OpenWRT based off the Xiaomi (MIPS 1004Kc V2.15) router _if_ someone took the effort.
 
+##### Decent router, but not for gamers
+Personally, the fact that it can't SQM Gigabit traffic visibly ruins online games for me (my RTT to Valve's Mumbai servers is 7ms).
+It has a ton of shit running and phoning home that I do not have visiblity into (not just TR-069), in spite of having root, this list doesn't even include any wifi modules:
+```
+# lsmod
+Module                  Size  Used by
+mt7615_whnat 66505 0 - Live 0xc446e000
+mt7603eap 2035359 0 - Live 0xc41f7000 (O)
+sw_rps_for_wifi 6771 0 - Live 0xc3363000 (O)
+mac_anti_spoofing 7136 0 - Live 0xc2c83000 (O)
+ebt_tc 1152 0 - Live 0xc267a000
+ebt_ftos 1248 0 - Live 0xc2661000
+iptable_filter 928 1 - Live 0xc1c9b000
+ovdsp 293630 2 - Live 0xc1c0f000 (O)
+foip 390174 1 ovdsp, Live 0xc1b23000 (PO)
+acodec_x 297679 1 ovdsp, Live 0xc1a03000 (PO)
+ortp 135973 1 ovdsp, Live 0xc1948000 (O)
+ksocket 4310 2 ovdsp,ortp, Live 0xc18f6000 (PO)
+hw_nat 333826 0 - Live 0xc1837000 (PO)
+swqos 15797 0 - Live 0xc17af000 (PO)
+fxs3 375916 4 ovdsp,ortp, Live 0xc1732000 (PO)
+multiwan 75126 0 - Live 0xc1711000 (O)
+ponmacfilter 11658 0 - Live 0xc1657000 (O)
+xpon_igmp 114938 1 multiwan, Live 0xc1620000 (O)
+slic3 867101 1 fxs3, Live 0xc1534000 (PO)
+ponvlan 221094 2 multiwan,xpon_igmp, Live 0xc149a000 (O)
+spi 33792 1 slic3, Live 0xc12e4000 (PO)
+lec 67858 1 fxs3, Live 0xc12bd000 (PO)
+pcm1 25579 2 slic3,spi, Live 0xc1298000 (PO)
+DSPCore 39551 6 ovdsp,ortp,fxs3,slic3,lec,pcm1, Live 0xc1279000 (PO)
+sys_mod 5953 7 ovdsp,ortp,fxs3,slic3,spi,pcm1,DSPCore, Live 0xc1266000 (O)
+xponmap 42290 3 hw_nat,multiwan,ponvlan, Live 0xc1189000 (O)
+xpon 334602 6 ponmacfilter,xpon_igmp,ponvlan,xponmap, Live 0xc10e7000 (O)
+phy 335486 0 - Live 0xc100d000 (O)
+qdma_wan 271272 1 xpon, Live 0xc0f32000 (PO)
+tcportbind 23781 2 multiwan,ponvlan, Live 0xc0eb8000 (O)
+vlantag_ct 24311 2 multiwan,ponvlan, Live 0xc0e9f000 (O)
+eth_ephy 96112 0 - Live 0xc0e71000 (PO)
+eth 195713 6 ortp,hw_nat,xpon_igmp,ponvlan,xpon,eth_ephy, Live 0xc0e0a000 (PO)
+ds_pm_counter 15424 0 - Live 0xc0daf000 (O)
+qdma_lan 273198 1 hw_nat, Live 0xc0d5e000 (PO)
+ifc 78371 2 qdma_wan,qdma_lan, Live 0xc0cd5000 (PO)
+fe_core 61258 2 qdma_wan,ds_pm_counter, Live 0xc0ca2000 (PO)
+ds_mdio 2610 1 eth, Live 0xc0c82000 (PO)
+nlk_msg 1622 0 - Live 0xc0c47000 (O)
+soft_rate_limit 10064 0 - Live 0xc0c1a000 (PO)
+sif 24063 1 phy,[permanent], Live 0xc0bd3000 (PO)
+tccicmd 80680 5 swqos,xpon,eth_ephy,eth,sif, Live 0xc0b94000 (PO)
+tcledctrl 34358 9 mt7603eap,hw_nat,fxs3,slic3,xpon,eth,tccicmd, Live 0xc0b51000 (PO)
+urlfilter 13402 0 - Live 0xc0b34000 (O)
+accesslimit 25754 0 - Live 0xc0b15000 (O)
+fuse 88201 0 - Live 0xc0acb000
+usb_storage 41055 0 - Live 0xc0a6d000
+vfat 9808 0 - Live 0xc0a4d000
+fat 56735 1 vfat, Live 0xc0a34000
+nls_cp936 120704 0 - Live 0xc09f8000
+sd_mod 31411 0 - Live 0xc09c8000
+scsi_mod 102263 2 usb_storage,sd_mod, Live 0xc0993000
+ip6table_filter 864 1 - Live 0xc095a000
+omci_intf_db 71421 8 multiwan,xpon_igmp,ponvlan,xponmap,xpon,tcportbind,vlantag_ct,eth, Live 0xc093d000 (PO)
+dsnetutils 7837 2 ponvlan,omci_intf_db, Live 0xc091f000 (PO)
+ds_dbg 6949 1 omci_intf_db, Live 0xc0911000 (PO)
+module_sel 2392 1 pcm1, Live 0xc0904000 (PO)
+maxnetdpi 4970 0 - Live 0xc08f7000 (O)
+ebt_arp 1680 0 - Live 0xc088f000
+ebt_vlan 1088 0 - Live 0xc0889000
+ebt_mark 816 8 - Live 0xc0883000
+ebtable_broute 912 1 - Live 0xc0879000
+xt_connlimit 5200 0 - Live 0xc0872000
+ebt_ip6 2080 5 - Live 0xc0866000
+ebt_ip 2000 8 - Live 0xc085f000
+ebtable_filter 1088 1 - Live 0xc0854000
+ebtables 18668 2 ebtable_broute,ebtable_filter, Live 0xc084a000
+ds_btn 1072 0 - Live 0xc083a000 (PO)
+ds_notifier_chain 1024 0 - Live 0xc082f000 (PO)
+dskproxy 10600 7 mt7603eap,multiwan,xpon,eth,ds_btn,ds_notifier_chain, Live 0xc0824000 (O)
+jffs2 110654 1 - Live 0xc0741000
+```
+The solution for me is to roll my own optics, you can read about other user's trying to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
+Reliance Jio Fiber customers in India have an identical device supplied, which users have managed to tweak, see https://github.com/JFC-Group/JF-Customisation
+Sadly, the firmware is quite different and none of the options there worked on the Airtel unit.
 
-This should list all the tables / chains / rules
+This one-liner should list all the tables / chains / rules
 ```
 iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'"
 ```
