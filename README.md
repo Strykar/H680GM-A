@@ -4,11 +4,22 @@ My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router 
 2. Port-forward ports 80 and 443 so I can run an HTTP(S) server on my new symmetric 1 Gigabit connection.
 
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
+
 Poke around the scripts, they have tips and examples for figuring this out on any router.
+
+WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for your environment / router, they will 100% break things.
 ### TLDR
 * [Getting port 80 and 443 forwards to work](https://github.com/Strykar/H680GM-A#tldr---getting-port-80-and-443-forwarded)
 
 * [Getting native IPv6 to work with a static IPv4 assigned](https://github.com/Strykar/H680GM-A#tldr---getting-native-ipv6-to-work-with-a-static-ipv4-assigned)
+
+|     Pros               |     Cons           |
+| ---------------------- | ------------------ |
+| Decent RAM / Flash size  |     No SQM, terrible for gaming         |
+| Ships with `/bin/tcpdump`| Ancient kernel and userland   |
+| Root access available | No GPL sources |
+| Ships with `/userfs/bin/tcapi`| Busybox gimps available binary options |
+| XPON module is 2.1 Gbps Down / 1 Gbps Up | 1 Gbit LAN NICs |
 
 This should list all the tables / chains / rules
 ```
@@ -84,18 +95,18 @@ iptables -A ACL -p tcp -m multiport --dports 21,23,22,69,161,53,7547 -j acl_chai
 It appears that the router was never configured to be dual-stacked for a customer with static IPv4.
 IPv6 is available only via PPPoE tunnel (1492 MTU) and static IPv4 is assigned via IPoE (1500 MTU) over VLAN 100.
 
-We dial ppp using pppd directly over the same VLAN (`100`) via the same virtual interface (`nas0_0`) used for our IPv4 traffic.
+We dial ppp using `pppd` directly over the same VLAN (`100`) via the same virtual interface (`nas0_0`) used for our IPv4 traffic.
 There are no responses to PPPoE discovery (`PAD*`) requests over any other VLAN.
 
 Some of this stuff is convoluted for no reason and kept throwing me off.
-The ip6 binary, is basically a stripped down dibbler-server binary and in non-static mode (dual-stack PPPoE), the router uses both dibbler-server and ip6 binaries to setup DHCPv6 because reasons I guess..
+The `ip6` binary, is basically a stripped down `dibbler-server` binary and in non-static mode (dual-stack PPPoE), the router uses both `dibbler-server` and `ip6` binaries to setup DHCPv6 because reasons I guess..
 ```
 # ls -la /userfs/bin/ip6
 -rwxrwxr-x    1 0        0          145508 /userfs/bin/ip6
 # ls -la /userfs/bin/dibbler-server 
 -rwxrwxr-x    1 0        0         1551488 /userfs/bin/dibbler-server
 ```
-The way to get IPv6 working on the LAN, is to disable dibbler-server, setup dibbler-client to get a /64 via the ppp0 interface and then start restart radvd with the conveniently created /etc/dibbler/radvd.conf(by dibbler-client).
+The way to get IPv6 working on the LAN, is to disable `dibbler-server`, setup `dibbler-client` to get a `/64` via the `ppp0` interface and then start restart `radvd` with the conveniently created `/etc/dibbler/radvd.conf`(by `dibbler-client`).
 ```
 trap "" HUP;/usr/bin/pppd unit 0 user 020xxx_mh@airtelbroadband.in password 70xxx nodetach holdoff 4 maxfail 0 usepeerdns plugin libpppoe.so nas0_0 lcp-echo-interval 30 lcp-max-terminate 3 lcp-echo-failure 3 persist mtu 1492 mru 1492 ipv6 ,::220 noip &
 
@@ -104,4 +115,4 @@ tail /data/log/messages | awk '/remote LL address/{print $NF}'
 /userfs/bin/radvd -C /etc/dibbler/radvd.conf -p /var/run/radvd.pid -l /var/log/radvd.log -m logfile
 /bin/ip -6 route add default ${REMOTE_LL} dev ppp0
 ```
-Boom! Native IPv6 for the LAN.
+Boom! Native (SLAAC) IPv6 for the LAN.
