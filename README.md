@@ -3,7 +3,7 @@ My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router 
 1. Dual-stack my router and LAN via the IPv6 /64 that Airtel provides to all residential customers natively now.
 2. Port-forward ports 80 and 443 so I can run an HTTP(S) server on my new symmetric 1 Gigabit connection.
 ---
-Review the dasan.service unit in this repository to understand how I set things up from a PC in the LAN.
+Review the `dasan.service` unit in this repository to understand how I set things up from a PC in the LAN.
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
