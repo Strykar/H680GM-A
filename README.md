@@ -11,6 +11,9 @@ Review the `dasan.service` unit in this repository to understand how I set thing
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
 
 India specific discussion at https://broadbandforum.co/threads/enabling-ipv6-with-a-static-ipv4-dasan-h680gm-a.221385/
+The solution for me is to roll my own optics, you can read about other user's success to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
+Reliance Jio Fiber customers in India have an identical device supplied, which users have managed to tweak, see https://github.com/JFC-Group/JF-Customisation
+Sadly, the firmware is quite different and none of the options there worked on the Airtel unit.
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
 
@@ -129,10 +132,6 @@ ds_notifier_chain 1024 0 - Live 0xc082f000 (PO)
 dskproxy 10600 7 mt7603eap,multiwan,xpon,eth,ds_btn,ds_notifier_chain, Live 0xc0824000 (O)
 jffs2 110654 1 - Live 0xc0741000
 ```
-The solution for me is to roll my own optics, you can read about other user's trying to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
-Reliance Jio Fiber customers in India have an identical device supplied, which users have managed to tweak, see https://github.com/JFC-Group/JF-Customisation
-Sadly, the firmware is quite different and none of the options there worked on the Airtel unit.
-
 This one-liner should list all the tables / chains / rules
 ```
 iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'"
