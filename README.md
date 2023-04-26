@@ -1,5 +1,7 @@
 # H680GM-A
-Notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router
+My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router to:
+1. Dual-stack my router and LAN via a /64 IPv6 that Airtel provides since all residential customers are dual-stacked in India.
+2. Port-forward ports 80 and 443 so I can run an HTTP(S) server on my new symmetric 1 Gigabit connection.
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
 ### TLDR
@@ -61,10 +63,6 @@ Thus it is impossible to configure a static IPv4 WAN address with IPv6, unless t
 ![reserved_port_range](https://user-images.githubusercontent.com/2946372/233778081-4d427d18-4ab8-4be0-a055-99318b78b435.png)
 
 Take note that port 22 is not on the list above.[^1]
-
-The other issue that was getting my goat was that the router was preventing port forwarding for a few ports.
-I needed ports 80 and 443 open and forwarded and this made me dig into the router a little bit.
-
 Having root ssh access helped..
 
 ## TLDR - Getting port 80 and 443 forwarded
@@ -80,3 +78,29 @@ iptables -D ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53,7547 -j a
 ```
 iptables -A ACL -p tcp -m multiport --dports 21,23,22,69,161,53,7547 -j acl_chain
 ```
+
+## TLDR - Getting native IPv6 to work with a static IPv4 assigned
+It appears that the router was never configured to be dual-stacked for a customer with static IPv4.
+IPv6 is available only via PPPoE tunnel (1492 MTU) and static IPv4 is assigned via IPoE (1500 MTU) over VLAN 100.
+
+We dial ppp using pppd directly over the same VLAN (`100`) via the same virtual interface (`nas0_0`) used for our IPv4 traffic.
+There are no responses to PPPoE discovery (`PAD*`) requests over any other VLAN.
+
+Some of this stuff is convoluted for no reason and kept throwing me off.
+The ip6 binary, is basically a stripped down dibbler-server binary and in non-static mode (dual-stack PPPoE), the router uses both dibbler-server and ip6 binaries to setup DHCPv6 because reasons I guess..
+```
+# ls -la /userfs/bin/ip6
+-rwxrwxr-x    1 0        0          145508 /userfs/bin/ip6
+# ls -la /userfs/bin/dibbler-server 
+-rwxrwxr-x    1 0        0         1551488 /userfs/bin/dibbler-server
+```
+The way to get IPv6 working on the LAN, is to disable dibbler-server, setup dibbler-client to get a /64 via the ppp0 interface and then start restart radvd with the conveniently created /etc/dibbler/radvd.conf(by dibbler-client).
+```
+trap "" HUP;/usr/bin/pppd unit 0 user 020xxx_mh@airtelbroadband.in password 70xxx nodetach holdoff 4 maxfail 0 usepeerdns plugin libpppoe.so nas0_0 lcp-echo-interval 30 lcp-max-terminate 3 lcp-echo-failure 3 persist mtu 1492 mru 1492 ipv6 ,::220 noip &
+
+tail /data/log/messages | awk '/remote LL address/{print $NF}'
+/userfs/bin/dibbler-client stop; start
+/userfs/bin/radvd -C /etc/dibbler/radvd.conf -p /var/run/radvd.pid -l /var/log/radvd.log -m logfile
+/bin/ip -6 route add default ${REMOTE_LL} dev ppp0
+```
+Boom! Native IPv6 for the LAN.
