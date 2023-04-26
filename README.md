@@ -10,9 +10,9 @@ My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router 
 Review the `dasan.service` unit in this repository to understand how I set things up from a PC in the LAN.
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
 
-India specific discussion at https://broadbandforum.co/threads/enabling-ipv6-with-a-static-ipv4-dasan-h680gm-a.221385/
-The solution for me is to roll my own optics, you can read about other user's success to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
-Reliance Jio Fiber customers in India have an identical device supplied, which users have managed to tweak, see https://github.com/JFC-Group/JF-Customisation
+* India specific discussion at https://broadbandforum.co/threads/enabling-ipv6-with-a-static-ipv4-dasan-h680gm-a.221385/
+* The solution for me is to roll my own optics, you can read about other user's success to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
+* Reliance Jio Fiber customers in India have an identical device supplied, which users have managed to tweak, see https://github.com/JFC-Group/JF-Customisation
 Sadly, the firmware is quite different and none of the options there worked on the Airtel unit.
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
