@@ -2,6 +2,10 @@
 My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router to:
 1. Dual-stack my router and LAN via the IPv6 /64 that Airtel provides to all residential customers natively now.
 2. Port-forward ports 80 and 443 so I can run an HTTP(S) server on my new symmetric 1 Gigabit connection.
+
+![image](https://user-images.githubusercontent.com/2946372/231237158-4f1219e7-9183-4921-bf03-ff17f6652395.png)
+[Image courtesy - https://twitter.com/geekyranjit/status/1403558141002850307]
+
 ---
 Review the `dasan.service` unit in this repository to understand how I set things up from a PC in the LAN.
 If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
@@ -65,9 +69,6 @@ VCED exceptions		: not available
 VCEI exceptions		: not available
 VPE			: 0
 ```
-
-![image](https://user-images.githubusercontent.com/2946372/231237158-4f1219e7-9183-4921-bf03-ff17f6652395.png)
-[Image courtesy - https://twitter.com/geekyranjit/status/1403558141002850307]
 
 I get a static IPv4 from my ISP (Airtel, via IPoE apparently) and this works well for the most part.
 
