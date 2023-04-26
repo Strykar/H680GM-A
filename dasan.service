@@ -1,0 +1,24 @@
+# /etc/systemd/system/dasan.service
+[Unit]
+Description=Unbreak Airtel Dasan router and setup native IPv6
+After=network-online.target sshd.service
+ConditionCapability=CAP_NET_ADMIN
+
+[Service]
+Type=simple
+AmbientCapabilities=CAP_NET_ADMIN
+
+ExecStartPre=bash -c /home/strykar/.bin/dasan_ssh.sh
+ExecStartPre=bash -c /home/strykar/.bin/dasan_ntp.sh
+
+ExecStart=bash -c /home/strykar/.bin/dasan_netfilter.sh
+
+ExecStartPost=bash -c /home/strykar/.bin/dasan_daemon.sh
+ExecStartPost=bash -c /home/strykar/.bin/dasan_ipv6.sh
+ExecStartPost=bash -c /home/strykar/.bin/aws_update_ipv6.sh
+
+User=strykar
+Group=strykar
+
+[Install]
+WantedBy=default.target
