@@ -5,9 +5,9 @@ My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router 
 
 Poke around the scripts, they have tips and examples for figuring this out on any router.
 ### TLDR
-[Getting port 80 and 443 forwards to work](https://github.com/Strykar/H680GM-A#tldr---getting-port-80-and-443-forwarded)
+* [Getting port 80 and 443 forwards to work](https://github.com/Strykar/H680GM-A#tldr---getting-port-80-and-443-forwarded)
 
-[Getting native IPv6 to work with a static IPv4 assigned]
+* [Getting native IPv6 to work with a static IPv4 assigned](https://github.com/Strykar/H680GM-A#tldr---getting-native-ipv6-to-work-with-a-static-ipv4-assigned)
 
 This should list all the tables / chains / rules
 ```
