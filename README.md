@@ -31,6 +31,27 @@ WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for
 
 
 ---
+
+## The long version
+This is _not_ a half bad router, gimped mostly (besides 1Gbit NICs and not enough oomph for Gigabit SQM) because it it locked by ISP firmware, but leagues ahead of other telco's provided firmware. The key, figuratively speaking, to unlocking this router is in it: `/userfs/bin/tcapi` assuming we can get / brute force a map of all the settings and their options, `tcapi`'s built-in help is sadly disabled. See YT user MxBNET's approach to disabling TR-069 here as opposed to mine [here](https://www.youtube.com/watch?v=h8v3pOaA24c). `/userfs/bin/tcapi readAll` will dump the config, with all the serial numbers and passwords. It's definitely the "right way" to configure things but I have not made much progress with it.
+```
+# /userfs/bin/tcapi
+set
+unset
+get
+show
+commit
+save
+read
+readAll
+staticGet
+```
+
+It does ship with tcpdump, which made troubleshooting DHCPv6-PD and ICMPv6 traffic trivial.
+
+Regarding OpenWRT, there is zero chance a driver for the Huawei / HiSense LTY9775M XPON module will ever be available, there is a non-zero chance it could boot OpenWRT based off the Xiaomi (MIPS 1004Kc V2.15) router _if_ someone takes the effort.
+
+
 This should list all the tables / chains / rules
 ```
 iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'"
