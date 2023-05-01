@@ -108,7 +108,7 @@ DASAN_START_IPV6() {
     local IP6_GW
     IP6_GW=$(${SSH_CMD} "tail /data/log/messages | awk '/remote LL address/{last=\$NF} END{print last}'")
 	[ -z "${IP6_GW}" ] && echo "Error: Failed to grep remote link-local address from syslog. IP6_GW variable is empty" && exit 1
-	${SSH_CMD} "/bin/sed -i 's/nas2/ppp0/g; s/^  ia/#&/; s/^  ta/#&/; s/^  # *pd/pd/' /etc/dibbler/client.conf" || \
+    ${SSH_CMD} "/bin/sed -i 's/nas2/ppp0/g; s/^  ia/#&/; s/^  ta/#&/; s/^  # *pd/pd/' /etc/dibbler/client.conf" || \
 		{ echo "Failed to sed /etc/dibbler/client.conf for ppp0 at ${ROUTER}" >&2; exit 1; }
     ${SSH_CMD} "/userfs/bin/dibbler-client start > /dev/null 2>&1" || \
         { echo "Failed to start Dibbler client at ${ROUTER}" >&2; exit 1; }
