@@ -18,9 +18,9 @@ SSH_CMD="sshpass -e ssh dasan"
 # Kill ultelnetd and tr69, restart dropbear and lighttpd with their new config
 DASAN_FIX_DAEMON() {
     ${SSH_CMD} "kill ${HTTP_PID}" || \
-		{ echo "Failed to kill Lighttpd ${HTTP_PID} at ${ROUTER}" >&2; exit 1; }
-	${SSH_CMD} "kill ${UPNP_PID}" || \
-		{ echo "Failed to kill miniuPnPd ${UPNP_PID} at ${ROUTER}" >&2; exit 1; }		
+    	{ echo "Failed to kill Lighttpd ${HTTP_PID} at ${ROUTER}" >&2; exit 1; }
+    ${SSH_CMD} "kill ${UPNP_PID}" || \
+    	{ echo "Failed to kill miniuPnPd ${UPNP_PID} at ${ROUTER}" >&2; exit 1; }		
     ${SSH_CMD} "kill ${TELN_PID}" || \
         { echo "Failed to kill utelnetd ${TELN_PID} at ${ROUTER}" >&2; exit 1; }
     ${SSH_CMD} "kill ${TR69_PID}" || \
@@ -35,11 +35,11 @@ DASAN_FIX_DAEMON() {
         { echo "Failed to kill igmpproxy at ${ROUTER}" >&2; exit 1; }
 #   ${SSH_CMD} "kill $(pidof callmgr)" || \
 #       { echo "Failed to kill /userfs/bin/callmgr at ${ROUTER}" >&2; exit 1; }
-	${SSH_CMD} "sed -i 's/USERLIMIT_GLOBAL=\"0\"/USERLIMIT_GLOBAL=\"1\"/; s/BIND_TO_ADDR=\"any\"/BIND_TO_ADDR=\"192.168.1.1\"/; s/ANONYMOUS_USER=\"no\"/ANONYMOUS_USER=\"yes\"/; s/ROOTDIR=\"\/mnt\"/ROOTDIR=\"\/data\"/' /tmp/etc/bftpd.conf && /userfs/bin/bftpd -d -c /tmp/etc/bftpd.conf" || \
-		{ echo "Failed to start bftpd daemon at ${ROUTER}" >&2; exit 1; } 
-	${SSH_CMD} "sed -i 's/^listening_ip=.*/listening_ip=br0/' /tmp/miniupnpd.conf && /userfs/bin/miniupnpd -f /tmp/miniupnpd.conf" || \
-		{ echo "Failed to re[configure|start] miniuPnPd ${UPNP_PID} at ${ROUTER}" >&2; exit 1; }
-	${SSH_CMD} "echo -e 'server.bind = \"192.168.1.1\"' >> /etc/lighttpd_clone_oneweb.conf" || \
+    ${SSH_CMD} "sed -i 's/USERLIMIT_GLOBAL=\"0\"/USERLIMIT_GLOBAL=\"1\"/; s/BIND_TO_ADDR=\"any\"/BIND_TO_ADDR=\"192.168.1.1\"/; s/ANONYMOUS_USER=\"no\"/ANONYMOUS_USER=\"yes\"/; s/ROOTDIR=\"\/mnt\"/ROOTDIR=\"\/data\"/' /tmp/etc/bftpd.conf && /userfs/bin/bftpd -d -c /tmp/etc/bftpd.conf" || \
+    	{ echo "Failed to start bftpd daemon at ${ROUTER}" >&2; exit 1; } 
+    ${SSH_CMD} "sed -i 's/^listening_ip=.*/listening_ip=br0/' /tmp/miniupnpd.conf && /userfs/bin/miniupnpd -f /tmp/miniupnpd.conf" || \
+    	{ echo "Failed to re[configure|start] miniuPnPd ${UPNP_PID} at ${ROUTER}" >&2; exit 1; }
+    ${SSH_CMD} "echo -e 'server.bind = \"192.168.1.1\"' >> /etc/lighttpd_clone_oneweb.conf" || \
         { echo "Failed to append Bind:IP to Lighttpd config at ${ROUTER}" >&2; exit 1; }
     ${SSH_CMD} "/bin/lighttpd -f /etc/lighttpd_clone_oneweb.conf" || \
         { echo "Failed to start Lighttpd daemon at ${ROUTER}" >&2; exit 1; }
