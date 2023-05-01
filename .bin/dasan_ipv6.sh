@@ -48,7 +48,7 @@ echo "${FILE_CONTENTS}" | ${SSH_CMD} 'cat > /etc/ppp/ppp0.conf'
 
 LOCAL_IPV6_SETUP() {
 	# Delete any 6Bone / Teredo IPs if the router assigns one from the default broken (when IPv4 is static) radvd.conf
-#	ip -6 addr | awk '$2 ~ /^3ffe:/ {system("sudo ip -6 addr del " $2 " dev enp2s0")}'
+	ip -6 addr | awk '$2 ~ /^3ffe:/ {system("sudo ip -6 addr del " $2 " dev enp2s0")}'
 	# Grok link-global IPv6 address and update DNS via aws-cliv2
 	local IPV6_IP
 	IPV6_IP=$(ip -6 addr show dev enp2s0 scope global | awk '/inet6/ {split($2, a, "/"); print a[1]}')
