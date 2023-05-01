@@ -8,7 +8,7 @@ SSH_CMD="sshpass -e ssh dasan"
 EXIT_CODE_DROP=$(${SSH_CMD} "ps | grep -q '[/]userfs/bin/dropbear -I 0' ; echo \$? " 2>/dev/null)
 
 DASAN_FIX_SSH() {
-	${SSH_CMD} "ps > /dev/null 2>&1"
+    ${SSH_CMD} "ps > /dev/null 2>&1"
     ${SSH_CMD} "cat /dev/null > /var/log/lastlog; sleep 5 &"
     ${SSH_CMD} "cat /dev/null > /var/log/wtmp; sleep 5 &"
     ${SSH_CMD} "/usr/bin/killall dropbear && /userfs/bin/dropbear -I 0 -p 192.168.1.1:22 > /dev/null 2>&1" && \
