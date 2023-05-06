@@ -200,7 +200,7 @@ The line `iptables -A ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53
 ```
 iptables -D ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53,7547 -j acl_chain - Deletes the factory created rule
 ```
-- Recreate the rule without the the ports we need
+- Recreate the rule without the the ports we need. This prevents traffic destined to {80,443} from being blackholed down the _acl_chain_ chain:
 ```
 iptables -A ACL -p tcp -m multiport --dports 21,23,22,69,161,53,7547 -j acl_chain
 ```
