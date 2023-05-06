@@ -36,7 +36,11 @@ WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for
 ---
 
 ## The long version
-This is _not_ a half bad router, gimped mostly (besides 1Gbit NICs and not enough oomph for Gigabit SQM) because it it locked by ISP firmware, but leagues ahead of other telco's provided firmware. The key, figuratively speaking, to unlocking this router is in it: `/userfs/bin/tcapi` assuming we can get / brute force a map of all the settings and their options, `tcapi`'s built-in help is sadly disabled. See YT user MxBNET's approach to disabling TR-069 here as opposed to mine [here](https://www.youtube.com/watch?v=h8v3pOaA24c). `/userfs/bin/tcapi readAll` will dump the config, with all the serial numbers and passwords. It's definitely the "right way" to configure things but I have not made much progress with it.
+This is _not_ a half bad router, gimped mostly (besides 1Gbit NICs and not enough oomph for Gigabit SQM) because it it locked by ISP firmware, but leagues ahead of other telco's provided firmware. The key, figuratively speaking, to unlocking this router is in it: `/userfs/bin/tcapi` assuming we can get / brute force a map of all the settings and their options, `tcapi`'s built-in help is sadly disabled.
+
+See YT user MxBNET's approach to disabling TR-069 using tcapi [here](https://www.youtube.com/watch?v=h8v3pOaA24c).
+
+`/userfs/bin/tcapi readAll` will dump the config, with all the serial numbers and passwords. It's definitely the _right way_ to configure things but I have not made much progress with it.
 ```
 # /userfs/bin/tcapi
 set
@@ -144,7 +148,7 @@ Linux tc 3.18.21 #6 SMP Wed Mar 31 07:52:27 UTC 2021 mips unknown
 ```
 The CPU appears to be a Dual Core (+2 threads) MIPS SoC with 256 MB RAM, similar to the [model_here] Xiaomi router.
 
-It has 256 MB RAM and loads the / partition as read-only SquashFS: `/dev/mtdblock3 on / type squashfs (ro,relatime)`
+It has 256 MB RAM and loads the / partition as: `/dev/mtdblock3 on / type squashfs (ro,relatime)`
 
 It does mount /data/ read-write: `/dev/mtdblock9 on /data type jffs2 (rw,relatime)` onto a 256MB flash memory chip which ships with 11 partitions from factory.
 
