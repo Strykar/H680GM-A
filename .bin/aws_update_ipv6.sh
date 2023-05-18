@@ -23,6 +23,7 @@ if [[ "$(dig +short -r AAAA ${V6_URL})" == "${IPV6_IP}" ]]; then
 	exit 0
 else
 	echo "$(/usr/bin/date): [AWS_CLIv2]  UPSERT: Stale IPv6 address [$(dig +short -r AAAA ${V6_URL})] detected, updating Route53.."
+	sudo sed -i "s/AllowAccessFromWebToFollowingIPAddresses=\"[^\"]*\"/AllowAccessFromWebToFollowingIPAddresses=\"127.0.0.1 192.168.1.3 192.168.1.10 70.71.186.189 182.70.116.80 ${IPV6_IP}\"/" /etc/awstats/awstats.mirror.4v1.in.conf
 	/usr/bin/aws route53 change-resource-record-sets \
     --hosted-zone-id "${ZONE_ID}" \
     --change-batch '{
