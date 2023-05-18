@@ -97,7 +97,7 @@ AWS_SECRET_ACCESS_KEY=xxx \
 		{ echo "Failed to port forward TCP/443 via ppp0 at ${ROUTER} to ${IPV6_IP}" >&2; exit 1; }
 	${IPT6_CMD} -t nat -A PREROUTING -i ppp0 -p udp --dport 443 -j DNAT --to-destination "${IPV6_IP}" || \
 		{ echo "Failed to port forward UDP/443 via ppp0 at ${ROUTER} to ${IPV6_IP}" >&2; exit 1; }
-	sudo sed -i "s/AllowAccessFromWebToFollowingIPAddresses=\"[^\"]*\"/AllowAccessFromWebToFollowingIPAddresses=\"127.0.0.1 192.168.1.10 70.71.186.189 182.70.116.80 \${IPV6_IP}\"/" /etc/awstats/awstats.mirror.4v1.in.conf
+	sudo sed -i "s/AllowAccessFromWebToFollowingIPAddresses=\"[^\"]*\"/AllowAccessFromWebToFollowingIPAddresses=\"127.0.0.1 192.168.1.3 192.168.1.10 70.71.186.189 182.70.116.80 ${IPV6_IP}\"/" /etc/awstats/awstats.mirror.4v1.in.conf
 	ip -6 addr | awk '$2 ~ /^3ffe:/ {system("sudo ip -6 addr del " $2 " dev enp2s0")}'
 }
 
