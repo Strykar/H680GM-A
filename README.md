@@ -138,7 +138,7 @@ jffs2 110654 1 - Live 0xc0741000
 ```
 This one-liner should list all the tables / chains / rules
 ```
-iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'"
+iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'
 ```
 ### Router hardware
 The firmware was built as recently as 2021, the kernel , and sadly the Openwrt release it is based on is ancient:
