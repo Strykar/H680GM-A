@@ -138,7 +138,7 @@ jffs2 110654 1 - Live 0xc0741000
 ```
 This one-liner should list all the tables / chains / rules
 ```
-iptables -tfilter -vnxL;iptables -tnat -vnxL;iptables -tmangle -vnxL;iptables -traw -vnxL;iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'
+iptables -tfilter -vnxL; iptables -tnat -vnxL; iptables -tmangle -vnxL; iptables -traw -vnxL; iptables -tsecurity -vnxL | grep -vE 'pkts|Chain'
 ```
 ### Router hardware
 The firmware was built as recently as 2021, the kernel , and sadly the Openwrt release it is based on is ancient:
@@ -192,7 +192,7 @@ Having root ssh access helped..
 ---
 
 ### TLDR - Getting port 80 and 443 forwarded
-The startup scripts invoke [`/etc/acl.sh`](https://gist.github.com/Strykar/13193cbeb57bfea8d2aa69a47afe2918) which prevents some ports from being forwarded
+The router's startup scripts invoke [`/etc/acl.sh`](https://gist.github.com/Strykar/13193cbeb57bfea8d2aa69a47afe2918) which prevents some ports from being forwarded
 
 The line `iptables -A ACL -p tcp -m multiport --dports 80,443,21,23,22,69,161,53,7547 -j acl_chain` is the culprit.
 
