@@ -8,7 +8,7 @@ My notes and scripts for the Dasan Networks H680GM-A (Airtel) GPON ONT / router 
 
 ---
 Review the `dasan.service` unit in this repository to understand how I set things up from a PC in the LAN.
-If you have Qs, use the [Discussions](https://github.com/Strykar/H680GM-A/discussions) option, open issues only for the scripts.
+If you have Qs, open a new [Discussion](https://github.com/Strykar/H680GM-A/discussions), open issues only for the scripts.
 
 * India specific discussion at https://broadbandforum.co/threads/enabling-ipv6-with-a-static-ipv4-dasan-h680gm-a.221385/
 * The solution for me is to roll my own optics, you can read about other user's success to get rid of their ISP ONT's at https://github.com/Anime4000/RTL960x
