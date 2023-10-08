@@ -36,7 +36,7 @@ WARNING: DO NOT ATTEMPT to run these scripts without ensuring they will work for
 ---
 
 ## The long version
-This is _not_ a half bad router, gimped mostly (besides 1Gbit NICs and not enough oomph for Gigabit SQM) because it it locked by ISP firmware, but leagues ahead of other telco's provided firmware. The key, figuratively speaking, to unlocking this router is in it: `/userfs/bin/tcapi` assuming we can get / brute force a map of all the settings and their options, `tcapi`'s built-in help is sadly disabled.
+This is _not_ a half bad router, gimped mostly (besides 1Gbit NICs and not enough oomph for Gigabit SQM) because it is locked by ISP firmware, but leagues ahead of other telco's provided firmware. The key, figuratively speaking, to unlocking this router is in it: `/userfs/bin/tcapi` assuming we can get / brute force a map of all the settings and their options, `tcapi`'s built-in help is sadly disabled.
 
 See :video_camera: YT user MxBNET's approach to disabling TR-069 using tcapi [here](https://www.youtube.com/watch?v=h8v3pOaA24c).
 
